@@ -20,6 +20,7 @@ try:
 
 except (Exception, psycopg2.Error) as error:
     print ("Error while fetching data from PostgreSQL", error)
+    print(telegram_bot_sendtext("Failed to fetch data from DB"))
     sys.exit("Error while fetching data from PostgreSQL")
 
 
@@ -46,6 +47,3 @@ for apt in data["feed"]["feed_items"]:
 
         cursor.execute("INSERT INTO apts (id) VALUES ('"+apt["id"]+"');")
         conn.commit()
-
-
-#print(data["feed"]["feed_items"][0]["row_1"])
