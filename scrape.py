@@ -23,20 +23,25 @@ except (Exception, psycopg2.Error) as error:
     print(telegram_bot_sendtext("Failed to fetch data from DB"))
     sys.exit("Error while fetching data from PostgreSQL")
 
+print("Connected to DB")
 
 apts = []
 for row in viewedapts:
     apts.append(row[0])
 
-print("list retrieved:")
+print("list retrieved: ")
 print(apts)
 
 URL = os.environ.get('search_url')
-r = requests.get(url = URL, headers={"USER-AGENT":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36"})
+try:
+    r = requests.get(url = URL, headers={"USER-AGENT":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36"})
+except
+    sys.exit("Error getting data from yad2")
+
 data = r.json()
 
 for apt in data["feed"]["feed_items"]:
-    if 'row_1' in apt and apt["id"] not in apts :
+    if 'row_1' in apt and apt["id"] not in apts:
         print(apt["row_1"]+": "+apt["id"])
         try:
             print("Sending msg via bot")
