@@ -39,9 +39,11 @@ except
     sys.exit("Error getting data from yad2")
 
 data = r.json()
+aptcount = 0
 
 for apt in data["feed"]["feed_items"]:
     if 'row_1' in apt and apt["id"] not in apts:
+        aptcount+=1
         print(apt["row_1"]+": "+apt["id"])
         try:
             print("Sending msg via bot")
@@ -50,5 +52,11 @@ for apt in data["feed"]["feed_items"]:
             print("Failed to send message with description, sending link only")
             print(telegram_bot_sendtext("https://www.yad2.co.il/item/" + apt["id"]))
 
-        cursor.execute("INSERT INTO apts (id) VALUES ('"+apt["id"]+"');")
-        conn.commit()
+        try:
+            cursor.execute("INSERT INTO apts (id) VALUES ('"+apt["id"]+"');")
+            conn.commit()
+        except:
+            print(telegram_bot_sendtext("Error inserting apt into DB"))
+            sys.exit("Error inserting apt into DB")
+
+print("Done processing. Found ",aptcount," new relevant listings")
