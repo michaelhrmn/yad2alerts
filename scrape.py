@@ -35,7 +35,7 @@ print(apts)
 URL = os.environ.get('search_url')
 try:
     r = requests.get(url = URL, headers={"USER-AGENT":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36"})
-except
+except:
     sys.exit("Error getting data from yad2")
 
 data = r.json()
