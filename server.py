@@ -40,7 +40,6 @@ class SimpleHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_POST(self):
         self.send_response(200)
         if self.rfile:
-             # print urlparse.parse_qs(self.rfile.read(int(self.headers['Content-Length'])))
              for key,value in dict(urlparse.parse_qs(self.rfile.read(int(self.headers['Content-Length'])))).items():
                  print(key + " = " + value[0])
 
@@ -49,6 +48,6 @@ class SimpleHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     try:
-        BaseHTTPServer.HTTPServer(("0.0.0.0", 5000), SimpleHandler).serve_forever()
+        BaseHTTPServer.HTTPServer(("0.0.0.0", os.environ['PORT']), SimpleHandler).serve_forever()
     except KeyboardInterrupt:
         print('shutting down server')
