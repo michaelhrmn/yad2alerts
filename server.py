@@ -6,7 +6,6 @@ import sys
 
 class SimpleHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_GET(self):
-        self.send_response(200)
         if "?" in self.path and "addQuery" in self.path:
             queryString = "https://www.yad2.co.il/api/pre-load/getFeedIndex/realestate/rent?";
 
@@ -20,13 +19,23 @@ class SimpleHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
                 cursor = conn.cursor()
                 cursor.execute("INSERT INTO queries(user_id, query) VALUES('623781198','" +queryString+"')")
+                htmlResponse = "inserted: " + queryString
                 conn.commit()
                 print("Record inserted successfully into python_users table")
 
             except (Exception, psycopg2.Error) as error:
                 print("Error connecting or inserting to PostgreSQL", error)
+                htmlResponse = "error with data insert "
                 sys.exit("Error connecting or inserting to PostgreSQL")
+        else:
+            htmlResponse = "no data inserted"
 
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        # Send the html message
+        self.wfile.write(htmlResponse)
+        return
 
     def do_POST(self):
         self.send_response(200)
