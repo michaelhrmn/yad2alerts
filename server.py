@@ -48,6 +48,6 @@ class SimpleHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     try:
-        BaseHTTPServer.HTTPServer(("0.0.0.0", os.environ['PORT']), SimpleHandler).serve_forever()
+        BaseHTTPServer.HTTPServer(('', os.environ['PORT']), SimpleHandler).serve_forever()
     except KeyboardInterrupt:
         print('shutting down server')
